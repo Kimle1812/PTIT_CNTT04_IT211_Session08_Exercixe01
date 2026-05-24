@@ -1,7 +1,7 @@
 package org.example.session08_exercise01.aspect;
 
-import com.example.it211ss08hw01.entity.InventoryLog;
-import com.example.it211ss08hw01.repository.InventoryLogRepository;
+import org.example.session08_exercise01.entity.InventoryLog;
+import org.example.session08_exercise01.repository.InventoryLogRepository;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -23,7 +23,7 @@ public class InventoryAspect {
     private InventoryLogRepository logRepository;
 
     // Security Check
-    @Before("execution(* com.example.it211ss08hw01.service.ProductService.deleteProduct(..))")
+    @Before("execution(* org.example.session08_exercise01.service.ProductService.deleteProduct(..))")
     public void checkDeletePermission(JoinPoint jp) {
         String role = RequestContextHolder.currentRequestAttributes()
                 .getAttribute("X-Role", RequestAttributes.SCOPE_REQUEST).toString();
@@ -33,7 +33,7 @@ public class InventoryAspect {
     }
 
     // Activity Logging
-    @AfterReturning(pointcut="execution(* com.example.it211ss08hw01.service.ProductService.stockIn(..)) && args(sku,quantity,username)",
+    @AfterReturning(pointcut="execution(* org.example.session08_exercise01.service.ProductService.stockIn(..)) && args(sku,quantity,username)",
             returning="result")
     public void logStockIn(String sku, int quantity, String username, Object result) {
         InventoryLog log = new InventoryLog();
@@ -44,7 +44,7 @@ public class InventoryAspect {
         logRepository.save(log);
     }
 
-    @AfterReturning(pointcut="execution(* com.example.it211ss08hw01.service.ProductService.stockOut(..)) && args(sku,quantity,username)",
+    @AfterReturning(pointcut="execution(* org.example.session08_exercise01.service.ProductService.stockOut(..)) && args(sku,quantity,username)",
             returning="result")
     public void logStockOut(String sku, int quantity, String username, Object result) {
         InventoryLog log = new InventoryLog();
@@ -56,7 +56,7 @@ public class InventoryAspect {
     }
 
     // Performance Tracking
-    @Around("execution(* com.example.it211ss08hw01.service.ProductService.inspectInventory(..))")
+    @Around("execution(* org.example.session08_exercise01.service.ProductService.inspectInventory(..))")
     public Object trackPerformance(ProceedingJoinPoint pjp) throws Throwable {
         long start = System.currentTimeMillis();
         Object result = pjp.proceed();
